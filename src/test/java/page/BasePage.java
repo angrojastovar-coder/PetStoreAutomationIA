@@ -1,12 +1,11 @@
 package page;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.Map;
 
 public class BasePage {
 
@@ -19,21 +18,64 @@ public class BasePage {
     }
 
     public void navigateTo(String url) {
+
         driver.get(url);
     }
 
     public WebElement find(By locator) {
+
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
     public void click(By locator) {
+
         find(locator).click();
     }
 
-    public void type(By locator, String text) {
-        WebElement element = find(locator);
+    /**
+     * Escritura Robusta: Asegura visibilidad, scroll, limpieza total y escritura.
+     * Si el clear() estándar no limpia, aplica combinación de teclas CTRL+A + DELETE.
+     */
+    public void typeSmart(By locator, String text) {
+        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+
+        // 1. Scroll suave al elemento para garantizar que esté a la vista
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
+
+        // 2. Clic para enfocar el elemento
+        element.click();
+
+        // 3. Limpieza profunda (evita concatenaciones indeseadas)
         element.clear();
-        element.sendKeys(text);
+        if (!element.getAttribute("value").isEmpty()) {
+            element.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.BACK_SPACE);
+        }
+        // 4. Escritura
+        if (text != null && !text.isEmpty() && !text.equalsIgnoreCase("[VACIO]")) {
+            element.sendKeys(text);
+        }
+    }
+
+    /**
+     * MÉTODO CLAVE: Llena un formulario completo a partir de un Map (clave -> valor de Cucumber)
+     * usando un diccionario de localizadores propios de la página.
+     *
+     * @param formValues Mapa con pares {Nombre Campo en Gherkin -> Valor a ingresar}
+     * @param fieldLocators Mapa con {Nombre Campo en Gherkin -> By locator HTML}
+     */
+    public void fillFormFields(Map<String, String> formValues, Map<String, By> fieldLocators) {
+        formValues.forEach((fieldName, value) -> {
+            // Ignora la fila de encabezado si viene presente en la tabla
+            if ("campo".equalsIgnoreCase(fieldName.trim())) {
+                return;
+            }
+            By locator = fieldLocators.get(fieldName.trim());
+            if (locator != null) {
+                typeSmart(locator, value);
+            } else {
+                throw new IllegalArgumentException("No se encontró el localizador para el campo: '" + fieldName + "'");
+            }
+        });
     }
 
     public String getText(By locator) {

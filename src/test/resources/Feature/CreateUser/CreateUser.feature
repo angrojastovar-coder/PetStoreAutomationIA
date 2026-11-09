@@ -15,26 +15,26 @@ Feature: Registro de Nueva Cuenta de Usuario (Sign Up) con Verificación de Pers
   @smoke @positive
   Scenario: TC-SIGNUP-01 - Registro exitoso con valores por defecto en preferencias mediante tabla de datos sin inicio automático de sesión
     When completa el formulario de registro con los siguientes datos requeridos:
-      | campo            | valor                                         |
-      | User ID          | generado en tiempo de ejecución (10 caracteres) |
-      | New password     | Passw0rd!+                                    |
-      | Repeat password  | Passw0rd!+                                    |
-      | First name       | Carlos                                        |
-      | Last name        | Tester                                        |
-      | Email            | generado en tiempo de ejecución (único)       |
-      | Phone            | +123456789                                    |
-      | Address 1        | Av. Central 123                               |
-      | Address 2        | [VACIO]                                       |
-      | City             | Bogotá                                        |
-      | State            | Cundinamarca                                  |
-      | Zip              | 110111                                        |
-      | Country          | Colombia                                      |
+      | campo           | valor                                   |
+      | User ID         | Agrojast18                              |
+      | New password    | Passw0rd!+                              |
+      | Repeat password | Passw0rd!+                              |
+      | First name      | Carlos                                  |
+      | Last name       | Tester                                  |
+      | Email           | generado en tiempo de ejecución (único) |
+      | Phone           | +123456789                              |
+      | Address 1       | Av. Central 123                         |
+      | Address 2       | [VACIO]                                 |
+      | City            | Bogotá                                  |
+      | State           | Cundinamarca                            |
+      | Zip             | 110111                                  |
+      | Country         | Colombia                                |
     And verifica que las opciones de perfil se encuentran en su estado predeterminado:
-      | preferencia          | valor_esperado |
-      | Language Preference  | english        |
-      | Favourite Category   | FISH           |
-      | Enable MyList        | desmarcado     |
-      | Enable MyBanner      | desmarcado     |
+      | preferencia         | valor_esperado |
+      | Language Preference | english        |
+      | Favourite Category  | FISH           |
+      | Enable MyList       | desmarcado     |
+      | Enable MyBanner     | desmarcado     |
     And hace clic en el botón "Save Account Information"
     Then el sistema procesa el registro exitosamente y redirige a la página principal "/catalog"
     And la URL actual del navegador contiene "/catalog"
@@ -43,26 +43,26 @@ Feature: Registro de Nueva Cuenta de Usuario (Sign Up) con Verificación de Pers
   @regression @positive
   Scenario: TC-SIGNUP-02 - Registro exitoso personalizando idioma, categoría favorita, opciones de perfil y dirección complementaria mediante tabla de datos
     When completa el formulario de registro con los siguientes datos requeridos:
-      | campo            | valor                                         |
-      | User ID          | generado en tiempo de ejecución (10 caracteres) |
-      | New password     | Secur3P@ss+                                   |
-      | Repeat password  | Secur3P@ss+                                   |
-      | First name       | Laura                                         |
-      | Last name        | Gomez                                         |
-      | Email            | generado en tiempo de ejecución (único)       |
-      | Phone            | 987654321                                     |
-      | Address 1        | Calle 45 # 12-34                              |
-      | Address 2        | Apto 302 Torre B                              |
-      | City             | Lima                                          |
-      | State            | Lima                                          |
-      | Zip              | 15001                                         |
-      | Country          | Perú                                          |
+      | campo           | valor                                           |
+      | User ID         | generado en tiempo de ejecución (10 caracteres) |
+      | New password    | Secur3P@ss+                                     |
+      | Repeat password | Secur3P@ss+                                     |
+      | First name      | Laura                                           |
+      | Last name       | Gomez                                           |
+      | Email           | generado en tiempo de ejecución (único)         |
+      | Phone           | 987654321                                       |
+      | Address 1       | Calle 45 # 12-34                                |
+      | Address 2       | Apto 302 Torre B                                |
+      | City            | Lima                                            |
+      | State           | Lima                                            |
+      | Zip             | 15001                                           |
+      | Country         | Perú                                            |
     And personaliza las opciones de perfil con los siguientes valores:
-      | preferencia          | valor_seleccionado |
-      | Language Preference  | japanese           |
-      | Favourite Category   | DOGS               |
-      | Enable MyList        | marcado            |
-      | Enable MyBanner      | marcado            |
+      | preferencia         | valor_seleccionado |
+      | Language Preference | japanese           |
+      | Favourite Category  | DOGS               |
+      | Enable MyList       | marcado            |
+      | Enable MyBanner     | marcado            |
     And hace clic en el botón "Save Account Information"
     Then el sistema procesa el registro exitosamente y redirige a la página principal "/catalog"
     And la URL actual del navegador contiene "/catalog"
@@ -266,42 +266,42 @@ Feature: Registro de Nueva Cuenta de Usuario (Sign Up) con Verificación de Pers
 
   @regression @ux
   Scenario: TC-SIGNUP-11 - Preservación granular de datos válidos en tabla y vaciado de contraseñas tras error de validación
-  When completa el formulario con datos de contacto válidos pero introduce contraseñas discrepantes:
-  | campo            | valor                                         |
-  | User ID          | generado en tiempo de ejecución (10 caracteres) |
-  | New password     | Passw0rd!+                                    |
-  | Repeat password  | Passw0rdNoMatch!+                             |
-  | First name       | Fernando                                      |
-  | Last name        | Preserva                                      |
-  | Email            | generado en tiempo de ejecución (único)       |
-  | Phone            | +123456789                                    |
-  | Address 1        | Av. Las Flores 789                            |
-  | Address 2        | Oficina 401                                   |
-  | City             | Cuenca                                        |
-  | State            | Azuay                                         |
-  | Zip              | 010101                                        |
-  | Country          | Ecuador                                       |
-  And hace clic en el botón "Save Account Information"
-  Then el sistema rechaza la solicitud mostrando el error correspondiente
-  And los campos de texto del formulario retienen íntegramente los valores ingresados:
-  | campo      | valor_retenido                      |
-  | First name | Fernando                            |
-  | Last name  | Preserva                            |
-  | Phone      | +123456789                          |
-  | Address 1  | Av. Las Flores 789                  |
-  | Address 2  | Oficina 401                         |
-  | City       | Cuenca                              |
-  | State      | Azuay                               |
-  | Zip        | 010101                              |
-  | Country    | Ecuador                             |
-  And el campo New password se encuentra completamente vacío
-  And el campo Repeat password se encuentra completamente vacío
+    When completa el formulario con datos de contacto válidos pero introduce contraseñas discrepantes:
+      | campo           | valor                                           |
+      | User ID         | generado en tiempo de ejecución (10 caracteres) |
+      | New password    | Passw0rd!+                                      |
+      | Repeat password | Passw0rdNoMatch!+                               |
+      | First name      | Fernando                                        |
+      | Last name       | Preserva                                        |
+      | Email           | generado en tiempo de ejecución (único)         |
+      | Phone           | +123456789                                      |
+      | Address 1       | Av. Las Flores 789                              |
+      | Address 2       | Oficina 401                                     |
+      | City            | Cuenca                                          |
+      | State           | Azuay                                           |
+      | Zip             | 010101                                          |
+      | Country         | Ecuador                                         |
+    And hace clic en el botón "Save Account Information"
+    Then el sistema rechaza la solicitud mostrando el error correspondiente
+    And los campos de texto del formulario retienen íntegramente los valores ingresados:
+      | campo      | valor_retenido     |
+      | First name | Fernando           |
+      | Last name  | Preserva           |
+      | Phone      | +123456789         |
+      | Address 1  | Av. Las Flores 789 |
+      | Address 2  | Oficina 401        |
+      | City       | Cuenca             |
+      | State      | Azuay              |
+      | Zip        | 010101             |
+      | Country    | Ecuador            |
+    And el campo New password se encuentra completamente vacío
+    And el campo Repeat password se encuentra completamente vacío
 
   @smoke @security
   Scenario: TC-SIGNUP-12 - Verificación de ausencia de sesión automática post-registro en la cabecera de la página de inicio
-  When completa y envía el formulario de registro con datos válidos completos
-  Then el sistema redirige al usuario a la URL "https://petstore.octoperf.com/actions/Catalog.action"
-  And la cabecera superior de la página muestra el enlace "Sign In"
-  And la cabecera superior no muestra el enlace "Sign Out"
-  And la cabecera superior no muestra el enlace "My Account"
-  And la cabecera superior no muestra ningún mensaje de bienvenida personalizado
+    When completa y envía el formulario de registro con datos válidos completos
+    Then el sistema redirige al usuario a la URL "https://petstore.octoperf.com/actions/Catalog.action"
+    And la cabecera superior de la página muestra el enlace "Sign In"
+    And la cabecera superior no muestra el enlace "Sign Out"
+    And la cabecera superior no muestra el enlace "My Account"
+    And la cabecera superior no muestra ningún mensaje de bienvenida personalizado
